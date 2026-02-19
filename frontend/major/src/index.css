@@ -1,0 +1,326 @@
+/* ================= GLOBAL RESET ================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  color: #f4f4f5;
+  overflow-x: hidden;
+  position: relative;
+  transition: background 0.5s ease;
+}
+
+/* ================= BACKGROUND IMAGE SYSTEM ================= */
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  animation: slowZoom 40s ease-in-out infinite alternate;
+  transition: 0.6s ease;
+  filter: brightness(0.9);
+}
+
+/* Gradient overlay for contrast */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 10, 35, 0.92),
+    rgba(5, 5, 15, 0.88)
+  );
+  z-index: -1;
+}
+
+/* ================= ROLE BASED BACKGROUNDS ================= */
+
+/* LOGIN PAGE */
+.login-page::before {
+  background-image: url("https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d");
+}
+
+/* USER DASHBOARD */
+.dashboard-page::before {
+  background-image: url("https://images.unsplash.com/photo-1605902711622-cfb43c44367f");
+}
+
+/* ADMIN DASHBOARD */
+.admin-page::before {
+  background-image: url("https://images.unsplash.com/photo-1556761175-b413da4baf72");
+}
+
+/* DRIVER DASHBOARD */
+.driver-page::before {
+  background-image: url("https://images.unsplash.com/photo-1519003722824-194d4455a60c");
+}
+
+/* Background animation */
+@keyframes slowZoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+
+/* ================= GLASS CARD ================= */
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(124, 77, 255, 0.35);
+  border-radius: 22px;
+  padding: 30px;
+  box-shadow: 0 15px 50px rgba(124, 77, 255, 0.25);
+  transition: all 0.4s cubic-bezier(.2,.8,.2,1);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 70px rgba(124, 77, 255, 0.4);
+}
+
+/* ================= PRIMARY BUTTON ================= */
+
+.btn-primary {
+  padding: 12px 26px;
+  border-radius: 40px;
+  border: none;
+  background: linear-gradient(135deg, #7c4dff, #00e5ff, #00c853);
+  background-size: 200% 200%;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 0 10px 30px rgba(124, 77, 255, 0.6);
+}
+
+.btn-primary:hover {
+  transform: translateY(-4px);
+  background-position: right center;
+  box-shadow: 0 15px 45px rgba(0, 229, 255, 0.6);
+}
+
+/* ================= SECONDARY BUTTON ================= */
+
+.btn-secondary {
+  padding: 10px 24px;
+  border-radius: 30px;
+  border: 1px solid #7c4dff;
+  background: transparent;
+  color: #7c4dff;
+  cursor: pointer;
+  transition: 0.3s ease;
+  width: 100%;
+}
+
+.btn-secondary:hover {
+  background: #7c4dff;
+  color: white;
+  box-shadow: 0 0 20px rgba(124, 77, 255, 0.6);
+  transform: translateY(-3px);
+}
+
+/* ================= INPUT FIELD ================= */
+
+.input-field {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 18px;
+  background: rgba(255,255,255,0.05);
+  color: white;
+  transition: 0.3s ease;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #7c4dff;
+  box-shadow: 0 0 18px rgba(124,77,255,0.6);
+  transform: scale(1.02);
+}
+
+select.input-field {
+  color: white;
+  background: rgba(255,255,255,0.05);
+}
+
+select.input-field option {
+  color: black;
+  background: white;
+}
+
+/* ================= LAYOUT ================= */
+
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 50px;
+  background: rgba(12, 8, 30, 0.75);
+  backdrop-filter: blur(25px);
+  border-bottom: 1px solid rgba(124,77,255,0.25);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  animation: slideDown 0.7s ease forwards;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+  padding: 50px;
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+/* ================= MODAL ================= */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 6, 25, 0.85);
+  backdrop-filter: blur(12px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ================= KEYFRAMES ================= */
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    padding: 30px;
+    gap: 20px;
+  }
+
+  .navbar {
+    padding: 15px 30px;
+  }
+
+  .glass-card {
+    padding: 25px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 15px 20px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    padding: 25px;
+  }
+
+  .glass-card {
+    padding: 20px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+  }
+
+  .center-container {
+    padding: 20px;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 13px;
+  }
+
+  .navbar {
+    padding: 12px 15px;
+  }
+
+  .dashboard-grid {
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .glass-card {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .input-field {
+    padding: 12px;
+  }
+
+  .modal-overlay {
+    padding: 15px;
+  }
+
+  .glass-card,
+  .modal-overlay > div {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  body {
+    font-size: 12px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: 10px 18px;
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "prop-types": "^15.8.1",
+    "recharts": "^3.7.0",
+    "socket.io-client": "^4.8.3"
+  }
+}
