@@ -17,16 +17,20 @@ connectDB();
 const app = express();
 app.set("trust proxy", 1);
 
+const CLIENT_URL =
+  process.env.CLIENT_URL ||
+  "http://localhost:5173";
+
 app.use(express.json());
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: CLIENT_URL,
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"]
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
   })
 );
-
 const sessionMiddleware = session({
   name: "connect.sid",
   secret: process.env.SESSION_SECRET || "devsecret",
@@ -38,16 +42,17 @@ const sessionMiddleware = session({
   }),
   cookie: {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production", 
+    secure: process.env.NODE_ENV === "production",
     sameSite:
       process.env.NODE_ENV === "production"
         ? "none"
         : "lax",
-    maxAge: 1000 * 60 * 60 
+    maxAge: 1000 * 60 * 60
   }
 });
 
 app.use(sessionMiddleware);
+
 app.use("/api/auth", authRoutes);
 app.use("/api/orders", orderRoutes);
 
@@ -59,10 +64,11 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL,
+    origin: CLIENT_URL,
     credentials: true,
     methods: ["GET", "POST"]
-  }
+  },
+  transports: ["websocket", "polling"]
 });
 
 io.engine.use(sessionMiddleware);
