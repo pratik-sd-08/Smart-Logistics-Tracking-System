@@ -1,10 +1,4 @@
 import { io } from "socket.io-client";
-
-/*
-  FORCE production URL.
-  Do NOT depend on env while debugging deployment.
-*/
-
 const SOCKET_URL =
   window.location.hostname === "localhost"
     ? "http://localhost:5000"
