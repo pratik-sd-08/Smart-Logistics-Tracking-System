@@ -6,7 +6,16 @@ export const register = async (req, res) => {
   const { name, email, password, role } = req.body;
 
   const existing = await User.findOne({ email });
-  if (existing) return res.status(400).json({ message: "User exists" });
+  if (existing) {
+    return res.status(400).json({ message: "User already exists" });
+  }
+  if (role === "admin") {
+    return res
+      .status(403)
+      .json({ message: "Admin registration is not allowed" });
+  }
+  const allowedRoles = ["user", "driver"];
+  const userRole = allowedRoles.includes(role) ? role : "user";
 
   const hashed = await bcrypt.hash(password, 10);
 
@@ -14,10 +23,13 @@ export const register = async (req, res) => {
     name,
     email,
     password: hashed,
-    role
+    role: userRole
   });
 
-  res.json({ message: "User created", user });
+  res.json({
+    message: "User created",
+    user
+  });
 };
 
 export const login = async (req, res) => {

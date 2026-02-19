@@ -69,7 +69,6 @@ export default function Register() {
         >
           <option value="user">User</option>
           <option value="driver">Driver</option>
-          <option value="admin">Admin</option>
         </select>
 
         <button className="btn-primary" onClick={handleRegister}>
