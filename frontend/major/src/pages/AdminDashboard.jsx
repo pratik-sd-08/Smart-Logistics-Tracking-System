@@ -23,7 +23,6 @@ export default function AdminDashboard() {
     deliveryLocation: { lat: "", lng: "" }
   });
 
-  /* 🔥 ADD THIS FOR ADMIN BACKGROUND */
   useEffect(() => {
     document.body.className = "admin-page";
   }, []);

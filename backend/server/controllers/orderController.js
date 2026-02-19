@@ -3,8 +3,6 @@ import AuditLog from "../models/AuditLog.js";
 import { v4 as uuidv4 } from "uuid";
 import eventBus from "../events/eventBus.js";
 
-/* ================= CREATE ORDER ================= */
-
 export const createOrder = async (req, res) => {
   const order = await Order.create({
     orderId: uuidv4(),
@@ -22,9 +20,6 @@ export const createOrder = async (req, res) => {
 
   res.json(order);
 };
-
-
-/* ================= GET ORDERS ================= */
 
 export const getOrders = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
@@ -51,9 +46,6 @@ export const getOrders = async (req, res) => {
   res.json({ orders, total });
 };
 
-
-/* ================= UPDATE STATUS (OTP SYSTEM) ================= */
-
 export const updateStatus = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -61,8 +53,6 @@ export const updateStatus = async (req, res) => {
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
-
-    /* ===== GENERATE OTP WHEN DELIVERY STARTS ===== */
 
     if (req.body.status === "in_transit") {
       order.deliveryOTP = Math.floor(1000 + Math.random() * 9000).toString();
@@ -81,8 +71,6 @@ export const updateStatus = async (req, res) => {
 
       return res.json(order);
     }
-
-    /* ===== VERIFY OTP WHEN DELIVERY COMPLETES ===== */
 
     if (req.body.status === "delivered") {
 
@@ -110,8 +98,6 @@ export const updateStatus = async (req, res) => {
       return res.json(order);
     }
 
-    /* ===== NORMAL STATUS UPDATE ===== */
-
     order.status = req.body.status;
 
     await order.save();
@@ -131,9 +117,6 @@ export const updateStatus = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
-
-/* ================= DELETE ORDER ================= */
 
 export const deleteOrder = async (req, res) => {
   const order = await Order.findOne({
@@ -155,9 +138,6 @@ export const deleteOrder = async (req, res) => {
 
   res.json({ message: "Order deleted" });
 };
-
-
-/* ================= UPDATE ORDER ================= */
 
 export const updateOrder = async (req, res) => {
   try {
@@ -210,9 +190,6 @@ export const updateOrder = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
-
-/* ================= ORDER STATS ================= */
 
 export const getOrderStats = async (req, res) => {
   const stats = await Order.aggregate([

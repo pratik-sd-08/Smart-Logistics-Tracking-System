@@ -19,8 +19,6 @@ export default function DriverDashboard() {
   const [orders, setOrders] = useState([]);
   const [otpInput, setOtpInput] = useState("");
   const [locationActive, setLocationActive] = useState(false);
-
-  /* 🔥 ADD DRIVER PAGE BACKGROUND */
   useEffect(() => {
     document.body.className = "driver-page";
   }, []);

@@ -33,8 +33,6 @@ export default function UserDashboard() {
     dropAddress: ""
   });
 
-  /* ================= SOCKET LISTENERS ================= */
-
   useEffect(() => {
     socket.on("orderCreated", (newOrder) => {
       setOrders(prev => [newOrder, ...prev]);
@@ -54,7 +52,6 @@ export default function UserDashboard() {
     };
   }, []);
 
-  /* ================= FETCH ORDERS ================= */
 
   useEffect(() => {
     fetchOrders();
@@ -74,7 +71,6 @@ export default function UserDashboard() {
     }
   };
 
-  /* ================= CREATE ORDER ================= */
 
   const createOrder = async () => {
     await API.post("/orders", {
@@ -96,22 +92,16 @@ export default function UserDashboard() {
     fetchOrders();
   };
 
-  /* ================= DELETE ORDER ================= */
-
   const deleteOrder = async (id) => {
     await API.delete(`/orders/${id}`);
     fetchOrders();
   };
-
-  /* ================= UPDATE ORDER ================= */
 
   const updateOrder = async () => {
     await API.put(`/orders/update/${editingOrder._id}`, editingOrder);
     setEditingOrder(null);
     fetchOrders();
   };
-
-  /* ================= VERIFY OTP ================= */
 
   const verifyOTP = async (id) => {
     await API.put(`/orders/status/${id}`, {
@@ -120,8 +110,6 @@ export default function UserDashboard() {
     });
     setOtpInput("");
   };
-
-  /* ================= EXPORT CSV ================= */
 
   const exportCSV = () => {
     const headers = [
@@ -166,8 +154,6 @@ export default function UserDashboard() {
     document.body.removeChild(link);
   };
 
-  /* ================= FILTER ================= */
-
   const filteredOrders = orders.filter(order =>
     order.customerName.toLowerCase().includes(search.toLowerCase())
   );
@@ -181,7 +167,6 @@ export default function UserDashboard() {
       animate={{ opacity: 1 }}
     >
 
-      {/* ================= CREATE ORDER ================= */}
 
       <motion.div className="glass-card">
         <h3>Create Order</h3>
@@ -202,8 +187,6 @@ export default function UserDashboard() {
           Create
         </button>
       </motion.div>
-
-      {/* ================= ORDER LIST ================= */}
 
       <motion.div className="glass-card">
         <h3>Your Orders</h3>
@@ -254,7 +237,6 @@ export default function UserDashboard() {
             <p><b>Pickup:</b> {order.pickupAddress}</p>
             <p><b>Drop:</b> {order.dropAddress}</p>
 
-            {/* 🔥 SHOW OTP TO CUSTOMER */}
             {order.status === "in_transit" && order.deliveryOTP && (
               <div style={{ marginTop: 10 }}>
                 <h4>Delivery OTP:</h4>
