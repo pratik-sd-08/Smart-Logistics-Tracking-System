@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { io } from "socket.io-client";
+import socket from "../socket";   
 import API from "../api/axios";
 import "../index.css";
-
-const socket = io("http://localhost:5000", {
-  withCredentials: true
-});
 
 const statusProgress = {
   assigned: "25%",
@@ -19,6 +15,7 @@ export default function DriverDashboard() {
   const [orders, setOrders] = useState([]);
   const [otpInput, setOtpInput] = useState("");
   const [locationActive, setLocationActive] = useState(false);
+
   useEffect(() => {
     document.body.className = "driver-page";
   }, []);
@@ -123,7 +120,6 @@ export default function DriverDashboard() {
 
         {orders.map(order => (
           <div key={order._id} style={{ marginBottom: 25 }}>
-
             <strong>{order.customerName}</strong>
 
             <motion.div
