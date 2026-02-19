@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import API from "../api/axios";
-import socket, { connectSocket, disconnectSocket } from "../socket";
+import { connectSocket, disconnectSocket } from "../socket";
 
 export const AuthContext = createContext();
 
@@ -8,29 +8,34 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  
   const login = async (email, password) => {
     const res = await API.post("/auth/login", { email, password });
 
-    localStorage.setItem("token", res.data.token);
+    const token = res.data.token;
+    localStorage.setItem("token", token);
+    const decoded = JSON.parse(atob(token.split(".")[1]));
 
-    setUser({ role: res.data.role });
+    setUser({ role: decoded.role });
 
+   
     connectSocket();
 
-    return res.data.role;
+    return decoded.role;
   };
 
-
   const logout = async () => {
-    await API.post("/auth/logout");
+    try {
+      await API.post("/auth/logout");
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
 
     localStorage.removeItem("token");
 
     disconnectSocket();
-
     setUser(null);
   };
-
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -42,11 +47,13 @@ export const AuthProvider = ({ children }) => {
 
     try {
       const decoded = JSON.parse(atob(token.split(".")[1]));
+
       setUser({ role: decoded.role });
 
       connectSocket();
-    } catch (error) {
+    } catch (err) {
       localStorage.removeItem("token");
+      setUser(null);
     } finally {
       setLoading(false);
     }

@@ -1,23 +1,16 @@
 import { io } from "socket.io-client";
-const SOCKET_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-const socket = io(SOCKET_URL, {
+const socket = io(import.meta.env.VITE_API_URL, {
   autoConnect: false,
-  withCredentials: true,
-  transports: ["websocket"]
+  withCredentials: true
 });
 
 export const connectSocket = () => {
-  if (!socket.connected) {
-    socket.connect();
-  }
+  if (!socket.connected) socket.connect();
 };
 
 export const disconnectSocket = () => {
-  if (socket.connected) {
-    socket.disconnect();
-  }
+  if (socket.connected) socket.disconnect();
 };
 
 socket.on("connect", () => {

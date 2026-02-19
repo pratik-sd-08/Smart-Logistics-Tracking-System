@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
@@ -14,7 +15,6 @@ dotenv.config();
 connectDB();
 
 const app = express();
-
 app.set("trust proxy", 1);
 
 app.use(express.json());
@@ -27,26 +27,27 @@ app.use(
   })
 );
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "devsecret",
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URI
-    }),
-    cookie: {
-      maxAge: 1000 * 60 * 60, 
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite:
-        process.env.NODE_ENV === "production"
-          ? "none"
-          : "lax"
-    }
-  })
-);
+const sessionMiddleware = session({
+  name: "connect.sid",
+  secret: process.env.SESSION_SECRET || "devsecret",
+  resave: false,
+  saveUninitialized: false,
+  proxy: true,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI
+  }),
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", 
+    sameSite:
+      process.env.NODE_ENV === "production"
+        ? "none"
+        : "lax",
+    maxAge: 1000 * 60 * 60 
+  }
+});
 
+app.use(sessionMiddleware);
 app.use("/api/auth", authRoutes);
 app.use("/api/orders", orderRoutes);
 
@@ -56,7 +57,6 @@ app.get("/", (req, res) => {
 
 const server = http.createServer(app);
 
-
 const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_URL,
@@ -64,6 +64,8 @@ const io = new Server(server, {
     methods: ["GET", "POST"]
   }
 });
+
+io.engine.use(sessionMiddleware);
 
 initSocket(io);
 
